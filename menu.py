@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from analizador import create_instructions
+
 def menu():
     # Crear una ventana principal
     root = tk.Tk()
@@ -32,12 +32,12 @@ def menu():
 
     combo.bind("<<ComboboxSelected>>", opcionCombo)
 
-    # Crear tres botones
+    # Crear tres botones      
+    btnAnalizar = tk.Button(framePrincipal, text="Analizar", )
+    btnAnalizar.grid(row=0, column=1, padx=1, pady=10)  
     def analizar():
-        create_instructions()
-
-    btnAnalizar = tk.Button(framePrincipal, text="Analizar", command=analizar)
-    btnAnalizar.grid(row=0, column=1, padx=1, pady=10)
+        pass
+          
 
     btnError = tk.Button(framePrincipal, text="Errores")
     btnError.grid(row=0, column=2, padx=2, pady=10)
@@ -64,8 +64,17 @@ def menu():
         botonCerrar.grid(row=2, column=0, padx=(10, 5), pady=10)        
 
         def leerRuta():
-            textBox.delete("1.0", "end")
-            textBox.insert("1.0", texto.get("1.0", "end-1c"))
+            cargarJson()
+            ventanaEmergente.destroy()      
+        def cargarJson():
+                try:
+                    with open(str(texto.get("1.0", "end-1c")), 'r') as archivo:
+                        contenido = archivo.read()
+                        textBox.delete('1.0', tk.END)
+                        textBox.insert(tk.END, contenido)
+                except FileNotFoundError:
+                    textBox.delete('1.0', tk.END)
+                    textBox.insert(tk.END, "Archivo no encontrado")
 
         botonLeer = tk.Button(ventanaEmergente, text="Leer", command=leerRuta)
         botonLeer.grid(row=2, column=1, padx=(5, 10), pady=10) 
@@ -105,6 +114,6 @@ def menu():
 
     root.mainloop()
 
-        
+
 
              
