@@ -1,18 +1,28 @@
 from collections import namedtuple 
+from graficas import *
+from procesadorMatematico import *
 
 Simbolo= namedtuple("Simbolo",["valor", "linea", "columna"])
 linea=1
 columna=1
 simbolos=[]
+error=""
+configuracion = {
+    "texto": None,
+    "fondo": None,
+    "fuente": None,
+    "forma": None,
+}
 
 def simboloTexto(texto, contador):
     simbolo=""
+    global error
     for espacio in texto:
         if espacio =='"':
             return[simbolo, contador]
         simbolo+=espacio
         contador+=1
-    print("Operacion no cerrada", simbolo)
+    error+="Operacion no cerrada"+str(simbolo) +"\n" 
 
 def simboloNumero(texto, contador):
     simbolo=""
@@ -32,7 +42,7 @@ def simboloNumero(texto, contador):
     return [int(simbolo), contador]
 
 def estradaDeSimbolo(texto):
-    global linea, columna, simbolos
+    global linea, columna, simbolos, error
     contador=0
     while contador < len(texto):
         espacio=texto[contador]
@@ -60,17 +70,10 @@ def estradaDeSimbolo(texto):
             contador=posicion
             simbolo=Simbolo(numero,linea,columna)
             simbolos.append(simbolo)
-        else:
-            print(
-                "Error: caracter desconocido:",
-                espacio,
-                "en linea:",
-                linea,
-                "columna:",
-                columna,
-            )
+        else:      
+            error+= "Error: caracter desconocido:" + str(espacio) + "en linea:" + str(linea) + "columna:" + str(columna)+"\n"
             contador+=1
-            columna+=1
+            columna+=1           
 
 def obtenerInstrucciones():
     global simbolos
@@ -92,6 +95,9 @@ def obtenerInstrucciones():
             valor2=simbolos.pop(0).valor
             if valor2 =="[":
                 valor2 =obtenerInstrucciones()
+        elif simbolo.valor in ["texto", "fondo", "fuente", "forma"]:
+            simbolos.pop(0)
+            configuracion[simbolo.valor] = simbolos.pop(0).valor
         else:
             pass
         if operacion and valor1 and valor2:
@@ -101,6 +107,8 @@ def obtenerInstrucciones():
         elif operacion and operacion in ["coseno"] and valor1:
             return [operacion,valor1]
         elif operacion and operacion in ["tangente"] and valor1:
+            return [operacion,valor1]
+        elif operacion and operacion in ["inverso"] and valor1:
             return [operacion,valor1]
     return None
 
@@ -113,13 +121,16 @@ def crearInstrucciones():
             instrucciones.append(instruccion)
     return instrucciones
 
-entrada= open("archivoDeEntrada.json", "r").read()
-estradaDeSimbolo(entrada)
+def analisis():
+    global simbolos
+    cadena=""
+    for i in simbolos:
+        cadena+=str(i)+"\n"
+    return cadena
 
-for contador in simbolos:
-    print(contador)
+def errores():
+    return error
 
-print("INSTRUCCIONES: ", crearInstrucciones())
 
 
 

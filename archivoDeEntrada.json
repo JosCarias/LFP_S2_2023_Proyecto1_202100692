@@ -31,7 +31,7 @@
             "valor2":3
         },
         {
-            "operacion":"divesion",
+            "operacion":"division",
             "valor1":15,
             "valor2":3
         },
@@ -40,26 +40,25 @@
           "valor2": 5.32 
         },
         { "operacion": "inverso",
-          "valor1": 4.5, 
-          "valor2": 5.32 
+          "valor1": 4.5
         },
         { "operacion": "coseno",
           "valor1": 4.5
         },
         { "operacion": "tangente",
           "valor1": 4.5
-        },
+        },$
         { "operacion": "mod",
           "valor1": 4.5, 
           "valor2": 5.32 
         }
     ],
-    "configuraciones":[
-        {
-            "texto":"operaciones",
-            "fondo":"azul",
-            "fuente":"blanco",
-            "forma": "circulo"
-        }      
+    "configuraciones": [
+      {
+        "texto": "ejemplo de operaciones",
+        "fondo": "cornflowerblue",
+        "fuente": "cyan",
+        "forma": "septagon"
+      }     
     ]
 }

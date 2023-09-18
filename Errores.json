@@ -1,0 +1,14 @@
+{
+  "Errores": [
+    {
+      "Error": "caracter desconocido",
+      "linea": 16,
+      "columna": 2
+    },
+    {
+      "Error": "caracter desconocido",
+      "linea": 48,
+      "columna": 2
+    }
+  ]
+}

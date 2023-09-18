@@ -1,7 +1,7 @@
 {
     "operaciones": [
       {
-        "operacion": "resta",
+        "operacion": "suma",
         "valor1": 6.5,
         "valor2": 3.5
       },
@@ -25,9 +25,9 @@
     "configuraciones": [
       {
         "texto": "ejemplo de operaciones",
-        "fondo": "amarillo",
-        "fuente": "rojo",
-        "forma": "circulo"
+        "fondo": "cornflowerblue",
+        "fuente": "cyan",
+        "forma": "septagon"
       }
     ]
   }

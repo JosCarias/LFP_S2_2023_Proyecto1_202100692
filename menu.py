@@ -1,15 +1,22 @@
 import tkinter as tk
 from tkinter import ttk
+from analizadorLexico import crearInstrucciones,estradaDeSimbolo, analisis,errores,configuracion
+from procesadorMatematico import imprimir
+from graficas import *
+from errores import *
 
+ruta=""
+    
 def menu():
     # Crear una ventana principal
     root = tk.Tk()
     root.title("Calculadora")
-    root.geometry("750x500")
+    root.geometry("1200x500")
+    root.resizable(False, False)
 
     # Crear un Frame principal
-    framePrincipal = tk.Frame(root)
-    framePrincipal.pack()
+    framePrincipal = tk.Frame(root,width=1100, height=30)
+    framePrincipal.pack(fill="both",side="top",padx=10,pady=10)
 
     def opcionCombo(event):
         seleccion = comboVar.get()
@@ -17,7 +24,7 @@ def menu():
         if seleccion == "Abrir":
             archivo()
         elif seleccion == "Guardar":
-            guardar()
+            guarda()
         elif seleccion == "Guardar Como":
             guardarComo()
         elif seleccion == "Salir":
@@ -32,22 +39,49 @@ def menu():
 
     combo.bind("<<ComboboxSelected>>", opcionCombo)
 
-    # Crear tres botones      
-    btnAnalizar = tk.Button(framePrincipal, text="Analizar", )
-    btnAnalizar.grid(row=0, column=1, padx=1, pady=10)  
+    # Crear tres botones  
     def analizar():
-        pass
-          
+        entrada = pantalla1.get("1.0", "end-1c")
+        pantalla1.delete('1.0', tk.END)
+        pantalla2.delete('1.0', tk.END)
+        estradaDeSimbolo(entrada)
+        pantalla1.insert(tk.END, (str(crearInstrucciones())))
 
-    btnError = tk.Button(framePrincipal, text="Errores")
+        opciones=eval(pantalla1.get("1.0", "end-1c"))
+        pantalla2.insert(tk.END, (str(imprimir(opciones))))
+  
+        
+            
+    btnAnalizar = tk.Button(framePrincipal, text="Analizar", command=analizar)
+    btnAnalizar.grid(row=0, column=1, padx=1, pady=10)         
+
+    def error():
+
+        pantalla2.delete('1.0', tk.END)
+        pantalla2.insert(tk.END, (str(errores())))
+        escribirjson(str(errores()))
+
+        
+
+    btnError = tk.Button(framePrincipal, text="Errores",command=error)
     btnError.grid(row=0, column=2, padx=2, pady=10)
 
-    btnReporte = tk.Button(framePrincipal, text="Reporte")
+    def procesarInstrucciones():
+        opciones=eval(pantalla1.get("1.0", "end-1c"))
+
+        hacerGrafica(opciones,configuracion)
+
+    btnReporte = tk.Button(framePrincipal, text="Reporte", command=procesarInstrucciones)
     btnReporte.grid(row=0, column=3, padx=3, pady=10)
 
     #crear texbox
-    textBox = tk.Text(root, wrap=tk.WORD, width=90, height=25)
-    textBox.pack()
+    pantalla1 = tk.Text(root, wrap=tk.WORD, width=75, height=25)
+    pantalla1.pack(side="left",padx=5,pady=10)
+
+    pantalla2 = tk.Text(root, wrap=tk.WORD, width=75, height=25)
+    pantalla2.pack(side="left",padx=5,pady=10)
+
+
 
     #fucion para preguntar la ruta de archivo json
     def archivo():
@@ -64,37 +98,36 @@ def menu():
         botonCerrar.grid(row=2, column=0, padx=(10, 5), pady=10)        
 
         def leerRuta():
-            cargarJson()
+            pantalla2.delete('1.0', tk.END)
+            global ruta
+            ruta=texto.get("1.0", "end-1c")
+            entrada = open(ruta, "r").read()
+            estradaDeSimbolo(entrada)    
+            pantalla2.insert(tk.END, str(analisis()))
+            cargarJson()          
             ventanaEmergente.destroy()      
         def cargarJson():
-                try:
-                    with open(str(texto.get("1.0", "end-1c")), 'r') as archivo:
-                        contenido = archivo.read()
-                        textBox.delete('1.0', tk.END)
-                        textBox.insert(tk.END, contenido)
-                except FileNotFoundError:
-                    textBox.delete('1.0', tk.END)
-                    textBox.insert(tk.END, "Archivo no encontrado")
+            try:
+                with open(str(texto.get("1.0", "end-1c")), 'r') as archivo:
+                    contenido = archivo.read()
+                    pantalla1.delete('1.0', tk.END)
+                    pantalla1.insert(tk.END, contenido)
+            except FileNotFoundError:
+                pantalla1.delete('1.0', tk.END)
+                pantalla1.insert(tk.END, "Archivo no encontrado")
 
         botonLeer = tk.Button(ventanaEmergente, text="Leer", command=leerRuta)
         botonLeer.grid(row=2, column=1, padx=(5, 10), pady=10) 
 
-        
-    def guardar():
-        ventanaEmergente = tk.Toplevel(root)
-        ventanaEmergente.title("Guardar")
-        
-        etiqueta = tk.Label(ventanaEmergente, text="Ingrese la ruta de guardado:")
-        etiqueta.grid(row=0, column=0, padx=10, pady=(10, 0), columnspan=2) 
+    def guarda():
+        cadena = pantalla1.get("1.0", "end-1c")
+        with open(ruta, 'w') as archivo:
+            archivo.write(cadena)
+        pantalla1.delete('1.0', tk.END)
+        pantalla1.insert("end", "Se ha guardado el JSON correctamente.")
+        pantalla2.delete('1.0', tk.END)
 
-        texto = tk.Text(ventanaEmergente, height=5, width=30)
-        texto.grid(row=1, column=0, padx=10, pady=(0, 10), columnspan=2)
-        
-        botonCerrar = tk.Button(ventanaEmergente, text="Cerrar", command=ventanaEmergente.destroy)
-        botonCerrar.grid(row=2, column=0, padx=(10, 5), pady=10)  
 
-        botonGuardar = tk.Button(ventanaEmergente, text="Guardar", command=ventanaEmergente.destroy)
-        botonGuardar.grid(row=2, column=1, padx=(5, 10), pady=10)  
 
     def guardarComo():
         ventanaEmergente = tk.Toplevel(root)
@@ -109,7 +142,16 @@ def menu():
         botonCerrar = tk.Button(ventanaEmergente, text="Cerrar",command=ventanaEmergente.destroy)
         botonCerrar.grid(row=2, column=0, padx=(10, 5), pady=10)  
 
-        botonGuardarComo = tk.Button(ventanaEmergente, text="Guardar Como", command=ventanaEmergente.destroy)
+        def guardaComo():
+            cadena = pantalla1.get("1.0", "end-1c")
+            nombre = texto.get("1.0", "end-1c")
+            with open(nombre, 'w') as archivo:
+                archivo.write(cadena)
+            pantalla1.delete('1.0', tk.END)
+            pantalla1.insert("end", "Se ha guardado el JSON correctamente.")
+            pantalla2.delete('1.0', tk.END)
+
+        botonGuardarComo = tk.Button(ventanaEmergente, text="Guardar Como", command=guardaComo)
         botonGuardarComo.grid(row=2, column=1, padx=(5, 10), pady=10)  
 
     root.mainloop()

@@ -1,0 +1,54 @@
+// Graph 20230918-135234
+digraph {
+	node [fillcolor=cornflowerblue fontcolor=cyan shape=septagon style=filled]
+	nodo_0 [label=suma]
+	nodo_1 [label=6.5]
+	nodo_0 -> nodo_1
+	nodo_2 [label=3.5]
+	nodo_0 -> nodo_2
+	nodo_3 [label=multiplicacion]
+	nodo_4 [label=4]
+	nodo_3 -> nodo_4
+	nodo_5 [label=potencia]
+	nodo_6 [label=2]
+	nodo_5 -> nodo_6
+	nodo_7 [label=raiz]
+	nodo_8 [label=9]
+	nodo_7 -> nodo_8
+	nodo_9 [label=2]
+	nodo_7 -> nodo_9
+	nodo_5 -> nodo_7
+	nodo_3 -> nodo_5
+	nodo_10 [label=suma]
+	nodo_11 [label=seno]
+	nodo_12 [label=90]
+	nodo_11 -> nodo_12
+	nodo_10 -> nodo_11
+	nodo_13 [label=5.32]
+	nodo_10 -> nodo_13
+	nodo_14 [label=suma]
+	nodo_15 [label=6.5]
+	nodo_14 -> nodo_15
+	nodo_16 [label=3.5]
+	nodo_14 -> nodo_16
+	nodo_17 [label=multiplicacion]
+	nodo_18 [label=4]
+	nodo_17 -> nodo_18
+	nodo_19 [label=potencia]
+	nodo_20 [label=2]
+	nodo_19 -> nodo_20
+	nodo_21 [label=raiz]
+	nodo_22 [label=9]
+	nodo_21 -> nodo_22
+	nodo_23 [label=2]
+	nodo_21 -> nodo_23
+	nodo_19 -> nodo_21
+	nodo_17 -> nodo_19
+	nodo_24 [label=suma]
+	nodo_25 [label=seno]
+	nodo_26 [label=90]
+	nodo_25 -> nodo_26
+	nodo_24 -> nodo_25
+	nodo_27 [label=5.32]
+	nodo_24 -> nodo_27
+}
