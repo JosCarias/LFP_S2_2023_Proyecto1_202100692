@@ -49,14 +49,11 @@ def menu():
 
         opciones=eval(pantalla1.get("1.0", "end-1c"))
         pantalla2.insert(tk.END, (str(imprimir(opciones))))
-  
-        
-            
+          
     btnAnalizar = tk.Button(framePrincipal, text="Analizar", command=analizar)
     btnAnalizar.grid(row=0, column=1, padx=1, pady=10)         
 
     def error():
-
         pantalla2.delete('1.0', tk.END)
         pantalla2.insert(tk.END, (str(errores())))
         escribirjson(str(errores()))
@@ -68,7 +65,6 @@ def menu():
 
     def procesarInstrucciones():
         opciones=eval(pantalla1.get("1.0", "end-1c"))
-
         hacerGrafica(opciones,configuracion)
 
     btnReporte = tk.Button(framePrincipal, text="Reporte", command=procesarInstrucciones)
